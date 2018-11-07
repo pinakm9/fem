@@ -1,0 +1,8 @@
+/tmp/tmpg7iybip9/dolfin_expression_449647a3609631b8c879a4b470c17658.cpp: In member function ‘virtual void dolfin::dolfin_expression_449647a3609631b8c879a4b470c17658::eval(Eigen::Ref<Eigen::Matrix<double, -1, 1> >, Eigen::Ref<const Eigen::Matrix<double, -1, 1> >) const’:
+/tmp/tmpg7iybip9/dolfin_expression_449647a3609631b8c879a4b470c17658.cpp:63:32: error: ‘y’ was not declared in this scope
+           values[2] = sin(x[0]+y[0]);
+                                ^
+/tmp/tmpg7iybip9/dolfin_expression_449647a3609631b8c879a4b470c17658.cpp:63:32: note: suggested alternative: ‘yn’
+           values[2] = sin(x[0]+y[0]);
+                                ^
+                                yn

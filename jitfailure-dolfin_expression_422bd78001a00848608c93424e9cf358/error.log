@@ -1,0 +1,4 @@
+/tmp/tmp49vrflbv/dolfin_expression_422bd78001a00848608c93424e9cf358.cpp: In member function ‘virtual void dolfin::dolfin_expression_422bd78001a00848608c93424e9cf358::eval(Eigen::Ref<Eigen::Matrix<double, -1, 1> >, Eigen::Ref<const Eigen::Matrix<double, -1, 1> >) const’:
+/tmp/tmp49vrflbv/dolfin_expression_422bd78001a00848608c93424e9cf358.cpp:61:27: error: invalid operands of types ‘Eigen::DenseCoeffsBase<Eigen::Ref<const Eigen::Matrix<double, -1, 1> >, 0>::CoeffReturnType {aka double}’ and ‘int’ to binary ‘operator^’
+           values[0] = x[0]^22;
+                       ~~~~^~~
