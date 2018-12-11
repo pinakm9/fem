@@ -1,0 +1,4 @@
+/tmp/tmpmrs7srn_/dolfin_expression_1bf7fd2fd8371922ded4fc249432571d.cpp: In member function ‘virtual void dolfin::dolfin_expression_1bf7fd2fd8371922ded4fc249432571d::eval(Eigen::Ref<Eigen::Matrix<double, -1, 1> >, Eigen::Ref<const Eigen::Matrix<double, -1, 1> >) const’:
+/tmp/tmpmrs7srn_/dolfin_expression_1bf7fd2fd8371922ded4fc249432571d.cpp:62:30: error: no match for ‘operator-’ (operand types are ‘int’ and ‘Eigen::Ref<const Eigen::Matrix<double, -1, 1> >’)
+           values[1] = 10+x*(1-x);
+                             ~^~

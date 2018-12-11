@@ -13,7 +13,7 @@ class Plotter(object):
 		self.id = str(id_)
 		self.cmd = ['ffmpeg', '-y', '-framerate', '15', '-i', 'file_type', '-c:v', 'libx264', '-r', '30', '-pix_fmt', 'yuv420p', 'out_file']
 	 
-	def plot(self, func, dir_, itr, time, xlabel = 'x', ylabel = 'y', show = False):
+	def plot(self, func, dir_, itr, time, xlabel = 'x', ylabel = 'y', quantity = '', show = False):
 		if dir_[-1] != '/':
 			dir_ = dir_ + '/'
 		self.dir = dir_
@@ -22,9 +22,9 @@ class Plotter(object):
 		plt.clf()
 		plt.xlabel(xlabel)
 		plt.ylabel(ylabel)
-		self.quantity = ylabel
-		plt.plot(self.x, self.y, label = 'time = {:.4f}'.format(time))
-		plt.legend()
+		self.quantity = quantity
+		plt.plot(self.x, self.y, label = quantity)
+		plt.legend(['time = {:.4f}'.format(time)])
 		if show is True:
 			plt.show()
 		plt.savefig(self.dir + self.quantity + '_' + self.id + '_' + '{:04.0f}'.format(itr))
@@ -47,6 +47,24 @@ class Plotter(object):
 		p.kill()
 		if delete is True:
 			self.purge()
+
+	def select(self, x, y, z):
+		u, v = z
+		mu1, std1, mu2, std2 = np.mean(u), np.std(u), np.mean(v), np.std(v)
+		indices = [False]*len(u)
+		for i, e in enumerate(u):
+			if (mu1 - std1) < e < (mu1 + std1) and (mu2 - std2) < v[i] < (mu2 + std2):
+				indices[i] = True
+		num, j = sum(indices), 0
+		x1, y1, u1, v1 = np.zeros(num), np.zeros(num), np.zeros(num), np.zeros(num)
+		for i in indices:
+			if i is True:
+				x1[j] = x[j]
+				y1[j] = y[j]
+				v1[j] = v[j]
+				u1[j] = u[j]
+				j += 1
+		return x1, y1, u1, v1
 
 class Plotter2(Plotter):
 
@@ -79,3 +97,13 @@ class Plotter2(Plotter):
 		plt.clf()
 		plt.xlabel(xlabel)
 		plt.ylabel(ylabel)
+		self.quantity = quantity 
+		z = self.func(self.x, self.y)
+		u, v = z
+		Q = plt.quiver(self.x, self.y, u, v)
+		plt.legend([quantity, 'time = {:.4f}'.format(time)])
+		#k = plt.quiverkey(Q, 0.9, 0.9, 2, r'$2 \frac{m}{s}$', labelpos='E', coordinates='figure')
+		if show is True:
+			plt.show()
+		plt.savefig(self.dir + self.quantity + '_' + self.id + '_' + '{:04.0f}'.format(itr))
+		print('Plot #{} generated'.format(itr), end = '\r')
