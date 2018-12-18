@@ -43,10 +43,10 @@ left = Expression("1-x[0]", degree = 1)
 right = Expression("x[0]", degree = 1)
 
 # Initial conditions
-u_n = interpolate(Expression(("sin(3.14159265359*x[0])", "30"), degree = 2), FS)
+u_n = interpolate(Expression(("0", "30"), degree = 2), FS)
 v_n, T_n = split(u_n)
-
-u_D = Expression(('0', '30'), degree = 2, t=0)
+#sin(3.14159265359*x[0])
+u_D = Expression(('0','30'), degree = 2, t=0)
 
 def boundary(x, on_boundary):
     return on_boundary
@@ -56,7 +56,7 @@ bc = DirichletBC(FS, u_D, boundary)
 
 # Define variational problem
 F_1 = ((v - v_n) / k)*f_1*dx + epsilon_1*v*f_1*dx + kappa*grad(T)[0]*f_1*dx +\
-	A_1hat*((T - T_n) / k)*f_2*dx + a_T*grad(T)[0]*v*f_2*dx + M_s1*grad(v)[0]*f_2*dx - Q*f_2*dx #+ kappa*10*(right*f_1-left*f_1)*ds
+	A_1hat*((T - T_n) / k)*f_2*dx + a_T*grad(T)[0]*v*f_2*dx + M_s1*grad(v)[0]*f_2*dx - Q*f_2*dx  
  
 
 F_2 = ((v - v_n) / k)*f_1*dx + epsilon_1*v*f_1*dx + beta*v*grad(v)[0]*f_1*dx + kappa*grad(T)[0]*f_1*dx +\
@@ -70,6 +70,7 @@ pltr = Plotter(mesh, id_='4')
 t = 0
 v_ = lambda y: v_n([y])
 T_ = lambda y: T_n([y])
+
 for n in range(num_steps):
 	#pltr.plot(v_,'qtcm1/velocity/', n, t, quantity = 'velocity_42')
 	pltr.plot(T_,'qtcm1/velocity/', n, t, quantity = 'temp_43')
