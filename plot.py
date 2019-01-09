@@ -36,11 +36,11 @@ class Plotter(object):
 	        if re.search('^'+self.quantity + '_' + self.id + '_\d*.png$', file):
 	            os.remove(os.path.join(self.dir, file))
 
-	def create_video(self, delete = True):
+	def create_video(self, delete = Truet):
 		file_type = self.quantity + '_' + self.id + '_' + '%04d.png'
 		out_file = self.quantity + '_' + self.id + '.mp4'
 		self.cmd[5] = file_type
-		self.cmd[-1] = out_file
+		self.cmd[-1] = out_file 
 		self.cwd = os.getcwd() + '/' + self.dir
 		p = subprocess.Popen(self.cmd, stderr = subprocess.PIPE, stdout = subprocess.PIPE, cwd = self.cwd)
 		time.sleep(3)

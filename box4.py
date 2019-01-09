@@ -7,19 +7,19 @@ from const import *
 dol.set_log_level(30)
 
 # Time stepping
-T = 5  # final time
-num_steps = 200   # number of time steps
+T = 1  # final time
+num_steps = 100   # number of time steps
 dt = T / num_steps
 k = Constant(dt)
 
 # Define mesh
-mesh = dol.RectangleMesh(dol.Point(0,0), dol.Point(aspect_India, 1), 10, 10, "right/left")
-"""
+mesh = dol.RectangleMesh(dol.Point(0,0), dol.Point(aspect_India, 1), 50, 50, "right/left")
+#"""
 dol.plot(mesh)
 plt.show()
 #"""
 # Define function space
-P1 = dol.FiniteElement('CG', dol.triangle, 5)
+P1 = dol.FiniteElement('CG', dol.triangle, 4)
 element = dol.MixedElement([P1, P1, P1])
 FS = dol.FunctionSpace(mesh, element)
 
@@ -55,10 +55,10 @@ right.mark(boundaries, 3)
 bottom.mark(boundaries, 4)
 
 # Boundary conditions
-bcs = [dol.DirichletBC(FS, dol.Expression(('0','0', '1'), degree = 2), boundaries, 2),
-       dol.DirichletBC(FS, dol.Expression(('-10*x[0]+5','5', '0'), degree = 2), boundaries, 4),
-       dol.DirichletBC(FS, dol.Expression(("5*(1-x[1])", "5*(1-x[1])","x[1]"), degree = 2), boundaries, 1),
-       dol.DirichletBC(FS, dol.Expression(("-5*(1-x[1])", "5*(1-x[1])","x[1]"), degree = 2), boundaries, 3)]
+bcs = [dol.DirichletBC(FS, dol.Expression(('0','0', '0'), degree = 2), boundaries, 2),
+       dol.DirichletBC(FS, dol.Expression(('-9.1*x[0]+5','5', '10'), degree = 2), boundaries, 4),
+       dol.DirichletBC(FS, dol.Expression(("5*(1-x[1])", "5*(1-x[1])","10*(1-x[1])"), degree = 2), boundaries, 1),
+       dol.DirichletBC(FS, dol.Expression(("-5*(1-x[1])", "5*(1-x[1])","10*(1-x[1])"), degree = 2), boundaries, 3)]
 
 
 # Define test functions
@@ -69,19 +69,19 @@ U = dol.Function(FS)
 u, v, T = dol.split(U)
 
 # Initial conditions
-U_n = dol.interpolate(dol.Expression(("(-10*x[0]+5)*(1-x[1])", "5*(1-x[1])","x[1]"), degree = 2), FS)
+U_n = dol.interpolate(dol.Expression(("(-9.1*x[0]+5)*(1-x[1])", "5*(1-x[1])","10*(1-x[1])"), degree = 2), FS)
 u_n, v_n, T_n = dol.split(U_n)
 dx, grad, derivative, solve = dol.dx, dol.grad, dol.derivative, dol.solve
 # Define variational problem
-F = ((u - u_n) / k)*f_1*dx - f*v*f_1*dx + kappa*grad(T)[0]*f_1*dx - epsilon_1*u*f_1*dx +\
-    ((v - v_n) / k)*f_2*dx + f*u*f_2*dx + kappa*grad(T)[1]*f_2*dx - epsilon_1*v*f_2*dx +\
+F = ((u - u_n) / k)*f_1*dx - f*v*f_1*dx + kappa*grad(T)[0]*f_1*dx + epsilon_1*u*f_1*dx +\
+    ((v - v_n) / k)*f_2*dx + f*u*f_2*dx + kappa*grad(T)[1]*f_2*dx + epsilon_1*v*f_2*dx +\
     A_1hat*((T - T_n) / k)*f_3*dx + M_s1*(grad(u)[0]+grad(v)[1])*f_3*dx - Q*f_3*dx + a_T*(v*grad(T)[1]+u*grad(T)[0])*f_3*dx
 
 
 # Solve the system for each time step
 t = 0
-pltr_T = plot.Plotter2(mesh, id_ = '')
-pltr_vel = plot.Plotter2(mesh, id_ = '')
+pltr_T = plot.Plotter2(mesh, id_ = '2')
+pltr_vel = plot.Plotter2(mesh, id_ = '2')
 temp = lambda x,y: T_n([x,y])
 vel = lambda x,y: (u_n([x,y]), v_n([x,y]))
 for n in range(num_steps):
